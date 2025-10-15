@@ -1,0 +1,9 @@
+<header th:fragment="main-header">
+    <nav aria-label="Menu de naveção">
+        <a th:href="@{/}">Início</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/categorias}">Categorias</a>
+    </nav>
+    <nav aria-label="Menu do usuário">
+        <a th:href="@{/login}">Entrar</a>
+    </nav>
+</header>

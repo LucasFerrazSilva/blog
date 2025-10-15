@@ -1,0 +1,80 @@
+/* reset.css - reset moderno e consistente */
+
+/* Zera margin, padding e border de todos os elementos */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Reset de fontes e herança */
+html {
+    line-height: 1.15; /* Corrige linha-base */
+    -webkit-text-size-adjust: 100%; /* Corrige zoom em mobile */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Remove borda padrão de links e imagens */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    border-style: none;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Corrige listas */
+ol, ul {
+    list-style: none;
+}
+
+/* Remove estilo de cabeçalhos e parágrafos */
+h1, h2, h3, h4, h5, h6, p {
+    font-weight: normal;
+}
+
+/* Remove estilos de formulários */
+button, input, select, textarea {
+    font: inherit;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+/* Corrige quotes e elementos de citação */
+blockquote, q {
+    quotes: none;
+}
+
+blockquote::before, blockquote::after,
+q::before, q::after {
+    content: '';
+}
+
+/* Corrige tabelas */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Corrige comportamento de elementos HTML5 */
+article, aside, details, figcaption, figure,
+footer, header, main, nav, section, summary {
+    display: block;
+}
+
+/* Força altura mínima para body e html */
+html, body {
+    height: 100%;
+}
+
+/* Cursor padrão */
+button {
+    cursor: pointer;
+}

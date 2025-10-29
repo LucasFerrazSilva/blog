@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
 <head>
     <title>Erro</title>
 </head>
 <body>
-<h1>Ocorreu um erro</h1>
-<p th:text="${status}"></p>
-<p th:text="${error}"></p>
-<p th:text="${message}"></p>
-<a th:href="@{/}">Voltar para a página inicial</a>
+<section layout:fragment="content">
+    <h1>Ocorreu um erro</h1>
+    <p th:text="${status}"></p>
+    <p th:text="${error}"></p>
+    <p th:text="${message}"></p>
+    <a th:href="@{/}">Voltar para a página inicial</a>
+</section>
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Lista de Posts</title>
+</head>
+
+<body>
+<section layout:fragment="content" class="container">
+    <h1>Posts</h1>
+
+    <div class="actions">
+        <a th:href="@{/posts/form}" class="btn btn-primary">Criar novo post</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.title}">Nome</td>
+            <td>
+                <a th:href="@{|/posts/form/${post.id}|}" class="btn btn-sm btn-warning">Editar</a>
+                <form th:action="@{|/posts/${post.id}|}" method="post" th:object="${post}"
+                      style="display:inline;">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
+                        Excluir
+                    </button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(posts)}">
+            <td colspan="4">Nenhum post cadastrado.</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

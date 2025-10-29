@@ -2,6 +2,7 @@
     <nav aria-label="Menu de naveção">
         <a th:href="@{/}">Início</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/categories}">Categorias</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/posts}">Posts</a>
     </nav>
     <nav aria-label="Menu do usuário">
         <a th:href="@{/login}">Entrar</a>

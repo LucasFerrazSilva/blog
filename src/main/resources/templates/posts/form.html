@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Formulário de Posts</title>
+    <link rel="stylesheet" th:href="@{/css/ckeditor.css}">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/47.1.0/ckeditor5.css" crossorigin>
+    <link rel="stylesheet"
+          href="https://cdn.ckeditor.com/ckeditor5-premium-features/47.1.0/ckeditor5-premium-features.css" crossorigin>
+</head>
+<body>
+<section layout:fragment="content" class="container">
+    <h1 th:text="${formMethod == 'put'} ? 'Editar Post' : 'Criar Post'">Formulário</h1>
+
+    <form id="post-form" th:action="@{${formAction}}" th:object="${post}" th:method="post">
+        <input type="hidden" name="_method" th:value="${formMethod}"/>
+
+        <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="title">Titulo</label>
+            <input id="title" type="text" th:field="*{title}" class="form-control"/>
+            <div th:if="${#fields.hasErrors('title')}" class="error" th:errors="*{title}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Conteúdo</label>
+            <textarea id="body" th:field="*{body}" style="display:none;"></textarea>
+
+            <!-- CKEditor substituirá esta textarea mantendo o binding th:field para submissão -->
+            <div class="main-container">
+                <div
+                        class="editor-container editor-container_classic-editor editor-container_include-style editor-container_include-block-toolbar editor-container_include-fullscreen"
+                        id="editor-container"
+                >
+                    <div class="editor-container__editor">
+                        <div id="editor" th:utext="${post.body}"></div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#fields.hasErrors('body')}" class="error" th:errors="*{body}"></div>
+        </div>
+
+        <div>
+            <label for="category">Categoria</label>
+            <select id="category" name="categoryId" th:field="*{categoryId}" class="form-control">
+                <option value="" th:if="${categories == null or #lists.isEmpty(categories)}">-- sem categorias --
+                </option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"
+                        th:selected="${cat.id == post.categoryId}">
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" th:text="${formMethod == 'put'} ? 'Atualizar' : 'Criar'">Enviar</button>
+            <a th:href="@{/posts}">Cancelar</a>
+        </div>
+    </form>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/47.1.0/ckeditor5.umd.js" crossorigin></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5-premium-features/47.1.0/ckeditor5-premium-features.umd.js"
+            crossorigin></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/47.1.0/translations/pt-br.umd.js" crossorigin></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5-premium-features/47.1.0/translations/pt-br.umd.js" crossorigin></script>
+    <script src="https://cdn.ckbox.io/ckbox/2.6.1/ckbox.js" crossorigin></script>
+    <script th:src="@{/js/ckeditor.js}"></script>
+</section>
+
+</body>
+</html>

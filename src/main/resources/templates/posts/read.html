@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${post.title} ?: 'Detalhes do Post'">Detalhes</title>
+</head>
+<body>
+<section layout:fragment="content" class="container">
+    <h1 th:text="${post.title}">Título</h1>
+
+    <div>
+        <h3>Conteúdo</h3>
+        <div th:utext="${post.body} ?: ''">Conteúdo do post</div>
+    </div>
+
+    <div>
+        <a th:href="@{/posts}">Voltar à lista</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{|/posts/form/${post.id}|}">Editar</a>
+    </div>
+</section>
+</body>
+</html>

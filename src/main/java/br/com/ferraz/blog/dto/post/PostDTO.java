@@ -9,6 +9,7 @@ public record PostDTO(
         String title,
         String body,
         Long categoryId,
+        CategoryDTO category,
         LocalDateTime createdAt
 ) {
 }

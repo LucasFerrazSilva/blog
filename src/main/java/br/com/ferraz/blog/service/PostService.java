@@ -9,6 +9,7 @@ import br.com.ferraz.blog.repository.CategoryRepository;
 import br.com.ferraz.blog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +52,10 @@ public class PostService {
     public void delete(Long id) {
         Post post = repository.findById(id).orElseThrow();
         repository.delete(post);
+    }
+
+    public List<Post> listRecent() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
 }

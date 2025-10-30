@@ -4,6 +4,7 @@ import br.com.ferraz.blog.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,12 +23,14 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/", "/login", "/error", "/css/**", "/js/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
+    http.authorizeHttpRequests(auth -> auth
+            // rotas públicas
+            .requestMatchers("/", "/login", "/error", "/css/**", "/js/**").permitAll()
+            // rotas que exigem autenticação (escrita em posts e todas categorias)
+            .requestMatchers("/posts/**", "/categories/**").authenticated()
+            // qualquer outra rota pública por padrão
+            .anyRequest().permitAll()
+    )
         .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
         .logout(LogoutConfigurer::permitAll);
 

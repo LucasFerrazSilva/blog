@@ -8,14 +8,14 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
 public interface PostMapper {
     @Mapping(source = "categoryId", target = "category.id")
     Post toEntity(NewPostDTO dto);
 
     @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "category", target = "category")
     PostDTO toDTO(Post post);
 
-    @Mapping(source = "category.id", target = "categoryId")
     List<PostDTO> toPostDTOList(List<Post> posts);
 }

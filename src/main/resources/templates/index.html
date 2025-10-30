@@ -8,7 +8,21 @@
 <body>
 <section layout:fragment="content">
     <h1>Bem-vindo ao blog!</h1>
-    <p>Conteúdo da home...</p>
+
+    <div th:if="${posts != null and #lists.isEmpty(posts) == false}">
+        <ul>
+            <li th:each="post : ${posts}">
+                <h2><a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}">Título</a></h2>
+                <p th:text="${post.createdAt}">2025-01-01T00:00</p>
+                <a th:href="@{'/ler/' + ${post.category.name} + '/' + ${post.id}}">Ler mais</a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${posts == null or #lists.isEmpty(posts)}">
+        <p>Não há posts disponíveis no momento.</p>
+    </div>
+
 </section>
 </body>
 </html>

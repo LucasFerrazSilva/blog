@@ -151,7 +151,8 @@ class PostControllerTest {
         post.setCategory(category);
         postRepository.save(post);
 
-        mockMvc.perform(get("/posts/" + post.getId())
+        // usar o endpoint público por slug: /ler/{category}/{slug}
+        mockMvc.perform(get("/ler/" + post.getCategory().getName() + "/" + post.getSlug())
                         .with(testUser()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("posts/read"))

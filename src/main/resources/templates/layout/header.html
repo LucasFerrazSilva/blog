@@ -3,6 +3,11 @@
         <a th:href="@{/}">Início</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/categories}">Categorias</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/posts}">Posts</a>
+
+        <!-- categorias carregadas globalmente -->
+        <span th:each="cat : ${menuCategories}">
+            <a th:href="@{/categoria/{name}(name=${cat.name})}" th:text="${cat.name}"></a>
+        </span>
     </nav>
     <nav aria-label="Menu do usuário">
         <a th:href="@{/login}">Entrar</a>

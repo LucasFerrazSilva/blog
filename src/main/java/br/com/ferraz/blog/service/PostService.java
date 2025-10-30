@@ -43,6 +43,10 @@ public class PostService {
         return repository.findAll();
     }
 
+    public List<Post> listByCategoryName(String categoryName) {
+        return repository.findAllByCategoryNameOrderByCreatedAtDesc(categoryName);
+    }
+
     @Transactional
     public Post update(Long id, UpdatePostDTO updatePostDTO) {
         Post post = repository.findById(id).orElseThrow();

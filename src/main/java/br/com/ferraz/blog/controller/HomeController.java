@@ -39,6 +39,16 @@ public class HomeController {
         return modelAndView;
     }
 
+    @GetMapping("/categoria/{name}")
+    public ModelAndView postsByCategory(@PathVariable("name") String name) {
+        List<Post> list = service.listByCategoryName(name);
+        List<PostDTO> posts = mapper.toPostDTOList(list);
+        ModelAndView modelAndView = new ModelAndView("posts/category");
+        modelAndView.addObject("posts", posts);
+        modelAndView.addObject("categoryName", name);
+        return modelAndView;
+    }
+
     @GetMapping("/login")
     public ModelAndView login() {
         return new ModelAndView("login.html");

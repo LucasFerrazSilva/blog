@@ -9,6 +9,11 @@
 <body>
 <section layout:fragment="content" class="container">
     <h1 th:text="${post.title}">Título</h1>
+    <h3 th:text="${post.subtitle}"></h3>
+
+    <div th:if="${post.image != null}">
+        <img th:attr="data-base64=${post.image}" alt="Capa" style="max-width: 100%; height: auto;"/>
+    </div>
 
     <div>
         <h3>Conteúdo</h3>
@@ -20,6 +25,20 @@
         &nbsp;|&nbsp;
         <a th:href="@{|/posts/form/${post.id}|}">Editar</a>
     </div>
+    <script>
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('img[data-base64]').forEach(function (img) {
+                    var b = img.getAttribute('data-base64');
+                    if (b) {
+                        img.src = 'data:image/*;base64,' + b;
+                    }
+                });
+            });
+        })();
+    </script>
 </section>
+
+
 </body>
 </html>

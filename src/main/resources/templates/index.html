@@ -11,10 +11,28 @@
 
     <div th:if="${posts != null and #lists.isEmpty(posts) == false}">
         <ul>
-            <li th:each="post : ${posts}">
-                <h2><a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}">Título</a></h2>
-                <p th:text="${post.createdAt}">2025-01-01T00:00</p>
-                <a th:href="@{'/ler/' + ${post.category.name} + '/' + ${post.id}}">Ler mais</a>
+            <li th:each="post : ${posts}" style="margin-bottom:24px; list-style:none;">
+                <div style="display:flex; gap:16px; align-items:flex-start;">
+                    <div th:if="${post.image != null}" style="flex:0 0 160px;">
+                        <img th:attr="data-base64=${post.image}"
+                             alt="Capa" style="max-width:160px; max-height:120px; object-fit:cover;"/>
+                    </div>
+
+                    <div style="flex:1;">
+                        <h2 style="margin:0;">
+                            <a th:href="@{'/ler/' + ${post.category.name} + '/' + ${post.slug}}" th:text="${post.title}">Título</a>
+                        </h2>
+                        <h4 th:if="${post.subtitle != null}" style="margin:4px 0 8px; color:#666;" th:text="${post.subtitle}">Subtítulo</h4>
+
+                        <div style="font-size:0.9em; color:#999; margin-bottom:8px;">
+                            <span th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2025 00:00</span>
+                        </div>
+
+                        <div>
+                            <a th:href="@{'/ler/' + ${post.category.name} + '/' + ${post.slug}}">Ler mais</a>
+                        </div>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
@@ -23,6 +41,20 @@
         <p>Não há posts disponíveis no momento.</p>
     </div>
 
+    <script>
+        // Monta src das imagens a partir do atributo data-base64 para evitar concatenação de strings em SpEL
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('img[data-base64]').forEach(function (img) {
+                    var b = img.getAttribute('data-base64');
+                    if (b) {
+                        img.src = 'data:image/*;base64,' + b;
+                    }
+                });
+            });
+        })();
+    </script>
 </section>
+
 </body>
 </html>

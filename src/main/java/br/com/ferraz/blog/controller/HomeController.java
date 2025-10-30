@@ -30,10 +30,10 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping("/ler/{category}/{postId}")
+    @GetMapping("/ler/{category}/{slug}")
     public ModelAndView readPost(@PathVariable("category") String category,
-                                 @PathVariable("postId") Long postId) {
-        Post post = service.findById(postId);
+                                 @PathVariable("slug") String slug) {
+        Post post = service.findBySlug(slug);
         ModelAndView modelAndView = new ModelAndView("posts/read");
         modelAndView.addObject("post", mapper.toDTO(post));
         return modelAndView;

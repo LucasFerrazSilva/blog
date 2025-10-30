@@ -29,6 +29,11 @@
         </div>
 
         <div class="form-group">
+            <label for="subtitle">Subtítulo</label>
+            <input id="subtitle" type="text" th:field="*{subtitle}" class="form-control"/>
+        </div>
+
+        <div class="form-group">
             <label>Conteúdo</label>
             <textarea id="body" th:field="*{body}" style="display:none;"></textarea>
 
@@ -44,6 +49,16 @@
                 </div>
             </div>
             <div th:if="${#fields.hasErrors('body')}" class="error" th:errors="*{body}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="imageFile">Imagem (arquivo)</label>
+            <input id="imageFile" type="file" accept="image/*" class="form-control" />
+            <div style="margin-top:8px;">
+                <img id="imagePreview" src="" alt="Preview" style="max-width:200px; display:none;" />
+            </div>
+            <!-- campo hidden que será enviado com o base64 convertido -->
+            <input id="image" type="hidden" th:field="*{image}" />
         </div>
 
         <div>
@@ -72,6 +87,45 @@
     <script src="https://cdn.ckeditor.com/ckeditor5-premium-features/47.1.0/translations/pt-br.umd.js" crossorigin></script>
     <script src="https://cdn.ckbox.io/ckbox/2.6.1/ckbox.js" crossorigin></script>
     <script th:src="@{/js/ckeditor.js}"></script>
+
+    <script>
+        // Converte arquivo de imagem para base64 e popula o campo hidden #image
+        (function () {
+            const fileInput = document.getElementById('imageFile');
+            const hiddenInput = document.getElementById('image');
+            const preview = document.getElementById('imagePreview');
+
+            if (!fileInput || !hiddenInput) return;
+
+            fileInput.addEventListener('change', function (ev) {
+                const file = ev.target.files && ev.target.files[0];
+                if (!file) {
+                    hiddenInput.value = '';
+                    if (preview) { preview.style.display = 'none'; preview.src = ''; }
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const dataUrl = e.target.result; // data:image/png;base64,AAAA...
+                    const base64 = dataUrl.split(',')[1];
+                    hiddenInput.value = base64;
+                    if (preview) {
+                        preview.src = dataUrl;
+                        preview.style.display = '';
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Se já houver valor em hidden input (e.g. edição), mostra preview
+            document.addEventListener('DOMContentLoaded', function () {
+                if (hiddenInput.value) {
+                    preview.src = 'data:image/*;base64,' + hiddenInput.value;
+                    preview.style.display = '';
+                }
+            });
+        })();
+    </script>
 </section>
 
 </body>

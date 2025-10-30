@@ -35,6 +35,10 @@ public class PostService {
         return repository.findById(id).orElseThrow();
     }
 
+    public Post findBySlug(String slug) {
+        return repository.findBySlug(slug).orElseThrow();
+    }
+
     public List<Post> list() {
         return repository.findAll();
     }

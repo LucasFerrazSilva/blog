@@ -18,12 +18,18 @@
         <thead>
         <tr>
             <th>Nome</th>
+            <th>Subtítulo</th>
             <th>Ações</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="post : ${posts}">
-            <td th:text="${post.title}">Nome</td>
+            <td>
+                <div>
+                    <span th:text="${post.title}">Nome</span>
+                </div>
+            </td>
+            <td th:text="${post.subtitle}">Subtítulo</td>
             <td>
                 <a th:href="@{|/posts/form/${post.id}|}" class="btn btn-sm btn-warning">Editar</a>
                 <form th:action="@{|/posts/${post.id}|}" method="post" th:object="${post}"

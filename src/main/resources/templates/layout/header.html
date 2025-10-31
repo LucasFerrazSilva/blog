@@ -8,8 +8,11 @@
         <span th:each="cat : ${menuCategories}">
             <a th:href="@{/categoria/{name}(name=${cat.name})}" th:text="${cat.name}"></a>
         </span>
-    </nav>
-    <nav aria-label="Menu do usuário">
-        <a th:href="@{/login}">Entrar</a>
+
+        <!-- search form -->
+        <form th:action="@{/search}" method="get" style="display:inline-block; margin-left:1rem;">
+            <input type="text" name="q" placeholder="Pesquisar..." th:value="${q}" />
+            <button type="submit">Buscar</button>
+        </form>
     </nav>
 </header>

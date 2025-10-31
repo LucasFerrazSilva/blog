@@ -20,11 +20,6 @@
         <div th:utext="${post.body} ?: ''">Conteúdo do post</div>
     </div>
 
-    <div>
-        <a th:href="@{/posts}">Voltar à lista</a>
-        &nbsp;|&nbsp;
-        <a th:href="@{|/posts/form/${post.id}|}">Editar</a>
-    </div>
     <script>
         (function () {
             document.addEventListener('DOMContentLoaded', function () {

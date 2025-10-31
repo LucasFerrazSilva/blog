@@ -113,5 +113,33 @@ class HomeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("login.html"));
     }
-}
 
+    @Test
+    @DisplayName("GET /search deve retornar resultados paginados")
+    void shouldSearchPostsPaginated() throws Exception {
+        // create 12 posts that match the query
+        for (int i = 1; i <= 12; i++) {
+            Post p = new Post();
+            p.setTitle("Query Post " + i);
+            p.setBody("conteudo " + i);
+            p.setCategory(category);
+            postRepository.save(p);
+        }
+
+        // page 0 should contain 10 results
+        mockMvc.perform(get("/search").param("q", "Query").param("page", "0"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("search/results"))
+                .andExpect(model().attributeExists("posts"))
+                .andExpect(content().string(containsString("Query Post 1")))
+                .andExpect(content().string(containsString("Query Post 10")));
+
+        // page 1 should contain remaining 2 results
+        mockMvc.perform(get("/search").param("q", "Query").param("page", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("search/results"))
+                .andExpect(model().attributeExists("posts"))
+                .andExpect(content().string(containsString("Query Post 11")))
+                .andExpect(content().string(containsString("Query Post 12")));
+    }
+}

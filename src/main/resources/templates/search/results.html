@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title th:text="${q != null} ? 'Resultados para ' + q : 'Resultados da busca'">Resultados da busca</title>
+</head>
+<body>
+<section layout:fragment="content" class="container">
+    <h1 th:text="${q != null} ? 'Resultados para ' + q : 'Resultados da busca'">Resultados da busca</h1>
+
+    <div th:if="${posts != null and #lists.isEmpty(posts) == false}">
+        <ul style="list-style:none; padding:0;">
+            <li th:each="post : ${posts}" style="margin-bottom:24px; border-bottom:1px solid #eee; padding-bottom:12px;">
+                <div style="display:flex; gap:16px; align-items:flex-start;">
+                    <div th:if="${post.image != null}" style="flex:0 0 160px;">
+                        <img th:attr="data-base64=${post.image}"
+                             alt="Capa" style="max-width:160px; max-height:120px; object-fit:cover;"/>
+                    </div>
+                    <div style="flex:1;">
+                        <h2 style="margin:0;">
+                            <a th:href="@{/ler/{category}/{slug}(category=${post.category.name},slug=${post.slug})}" th:text="${post.title}">Título</a>
+                        </h2>
+                        <h4 th:if="${post.subtitle != null}" style="margin:4px 0 8px; color:#666;" th:text="${post.subtitle}">Subtítulo</h4>
+
+                        <div style="font-size:0.9em; color:#999; margin-bottom:8px;">
+                            <span th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2025 00:00</span>
+                        </div>
+
+                        <div style="margin-top:8px;">
+                            <a th:href="@{/ler/{category}/{slug}(category=${post.category.name},slug=${post.slug})}">Ler mais</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${posts == null or #lists.isEmpty(posts)}">
+        <p>Nenhum resultado encontrado.</p>
+    </div>
+
+    <div th:if="${totalPages > 1}" style="margin-top:16px;">
+        <div>
+            <a th:if="${currentPage > 0}" th:href="@{/search(q=${q}, page=${currentPage-1})}">Anterior</a>
+            <span> Página <span th:text="${currentPage+1}"></span> de <span th:text="${totalPages}"></span></span>
+            <a th:if="${currentPage+1 < totalPages}" th:href="@{/search(q=${q}, page=${currentPage+1})}">Próxima</a>
+        </div>
+    </div>
+
+    <div style="margin-top:16px;">
+        <a th:href="@{/}">Voltar à página inicial</a>
+    </div>
+
+    <script>
+        // Monta src das imagens a partir do atributo data-base64
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                for (const img of document.querySelectorAll('img[data-base64]')) {
+                    const b = img.dataset.base64;
+                    if (b) {
+                        img.src = 'data:image/*;base64,' + b;
+                    }
+                }
+            });
+        })();
+    </script>
+</section>
+</body>
+</html>

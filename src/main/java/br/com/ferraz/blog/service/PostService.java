@@ -9,6 +9,8 @@ import br.com.ferraz.blog.repository.CategoryRepository;
 import br.com.ferraz.blog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +66,13 @@ public class PostService {
 
     public List<Post> listRecent() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+    }
+
+    public Page<Post> search(String q, int page, int size) {
+        // order ascending so older posts appear first (tests expect Query Post 1..10 on page 0)
+        // add secondary sort by id to make ordering deterministic when createdAt values are equal
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt").and(Sort.by(Sort.Direction.ASC, "id")));
+        return repository.findByTitleContainingIgnoreCaseOrSubtitleContainingIgnoreCaseOrBodyContainingIgnoreCase(q, q, q, pageable);
     }
 
 }

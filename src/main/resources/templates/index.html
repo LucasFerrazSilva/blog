@@ -6,9 +6,7 @@
     <title>Página Inicial</title>
 </head>
 <body>
-<section layout:fragment="content">
-    <h1>Bem-vindo ao blog!</h1>
-
+<section layout:fragment="content" class="container">
     <div th:if="${posts != null and #lists.isEmpty(posts) == false}">
         <ul>
             <li th:each="post : ${posts}" style="margin-bottom:24px; list-style:none;">

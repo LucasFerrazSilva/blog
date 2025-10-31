@@ -2,11 +2,7 @@
 header {
     background-color: #1a73e8;
     color: white;
-    padding: 10px 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: space-between;
+    position: relative; /* allow absolutely positioned hamburger */
 }
 
 header nav a {
@@ -17,4 +13,69 @@ header nav a {
 
 header nav a:hover {
     text-decoration: underline;
+}
+
+/* hamburger button styling and responsive behaviour */
+.hamburger-btn {
+    display: inline-block; /* show on desktop by default */
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    position: relative;
+    margin-right: 0.5rem;
+}
+
+/* make sure the button is visible and above other elements on small screens */
+@media (max-width: 699px) {
+    /* Keep hamburger appearance consistent with desktop on mobile (no extra mobile-only styling) */
+    .hamburger-btn {
+        display: inline-block !important;
+        z-index: 800;
+        background: transparent !important;
+        color: #fff !important;
+        font-size: 1.4rem;
+        padding: 6px 8px;
+        position: relative !important;
+    }
+
+    /* ensure header sits below overlay/sidebar while menu is open */
+    body.sidebar-open header {
+        z-index: 1000 !important;
+        position: relative !important;
+    }
+
+    /* Ensure header search is visible on mobile (override other rules) */
+    header nav form {
+        display: inline-flex !important;
+        align-items: center !important;
+        margin-left: 0.5rem !important;
+    }
+    header nav form input[type="text"] {
+        width: 120px !important;
+    }
+
+    /* keep home link visible and use normal flow (no extra left margin) */
+    header nav {
+        display:flex;
+        align-items:center;
+        gap:0.5rem;
+        margin-left: 0;
+    }
+
+    header nav a.nav-home {
+        display:inline-block;
+        color:white;
+        font-weight:600;
+        margin-left: 0.25rem;
+    }
+}
+
+/* ensure accessibility: visible focus state */
+.hamburger-btn:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
 }

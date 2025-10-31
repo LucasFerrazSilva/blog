@@ -1,18 +1,84 @@
-<header th:fragment="main-header">
+<header th:fragment="main-header" xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-BR">
+    <!-- header styles moved to static/css/style.css -->
+
     <nav aria-label="Menu de naveção">
-        <a th:href="@{/}">Início</a>
+        <button id="menuToggle" class="hamburger-btn" aria-label="Abrir menu" aria-expanded="false">☰</button>
+
+        <a th:href="@{/}" class="nav-home">Início</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/categories}">Categorias</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/posts}">Posts</a>
 
-        <!-- categorias carregadas globalmente -->
-        <span th:each="cat : ${menuCategories}">
-            <a th:href="@{/categoria/{name}(name=${cat.name})}" th:text="${cat.name}"></a>
-        </span>
+        <!-- hidden sidebar that lists categorias carregadas globalmente -->
+        <div id="sidebarOverlay" class="sidebar-overlay" tabindex="-1"></div>
+        <aside id="sidebarMenu" class="sidebar" aria-hidden="true" aria-label="Categorias do site"
+               style="background:#155ec2; color:#fff;">
+            <a href="#" class="close-btn" id="sidebarClose" aria-label="Fechar menu"
+               style="color:#fff !important; font-weight:600; text-decoration:none;">&times; Fechar</a>
+            <h3>Categorias</h3>
+
+            <ul class="menu-categories">
+                <li th:if="${menuCategories == null or #lists.isEmpty(menuCategories)}">Nenhuma categoria</li>
+                <li th:each="cat : ${menuCategories}">
+                    <a th:href="@{/categoria/{name}(name=${cat.name})}" th:text="${cat.name}"
+                       style="color:#fff !important; text-decoration:none !important;">Categoria</a>
+                </li>
+            </ul>
+        </aside>
 
         <!-- search form -->
         <form th:action="@{/search}" method="get" style="display:inline-block; margin-left:1rem;">
-            <input type="text" name="q" placeholder="Pesquisar..." th:value="${q}" />
+            <label for="menuSearch" class="sr-only" style="position:absolute; left:-9999px;">Pesquisar</label>
+            <input id="menuSearch" type="text" name="q" placeholder="Pesquisar..." th:value="${q}"/>
             <button type="submit">Buscar</button>
         </form>
     </nav>
+
+    <script>
+        (function () {
+            var toggle = document.getElementById('menuToggle');
+            var sidebar = document.getElementById('sidebarMenu');
+            var overlay = document.getElementById('sidebarOverlay');
+            var closeBtn = document.getElementById('sidebarClose');
+
+            function openSidebar() {
+                if (!sidebar) return;
+                sidebar.classList.add('open');
+                sidebar.setAttribute('aria-hidden', 'false');
+                if (overlay) overlay.style.display = 'block';
+                // hide the hamburger button so it doesn't appear above the sidebar
+                // add a global class to help CSS hide/show elements while sidebar is open
+                try { document.body.classList.add('sidebar-open'); } catch (e) { /* ignore */ }
+                // focus first link
+                var firstLink = sidebar.querySelector('a[href]');
+                if (firstLink) firstLink.focus();
+                // ensure sidebar links are readable (use for...of to avoid forEach lint)
+                var links = sidebar.querySelectorAll('a');
+                for (const a of links) {
+                    a.style.setProperty('color', '#ffffff', 'important');
+                    a.style.setProperty('text-decoration', 'none', 'important');
+                    a.style.setProperty('background-color', 'transparent', 'important');
+                }
+                if (closeBtn) { closeBtn.style.setProperty('color', '#ffffff', 'important'); closeBtn.style.fontWeight = '600'; }
+            }
+
+            function closeSidebar() {
+                if (!sidebar) return;
+                sidebar.classList.remove('open');
+                sidebar.setAttribute('aria-hidden', 'true');
+                if (overlay) overlay.style.display = 'none';
+                // restore hamburger visibility and aria state
+                try { document.body.classList.remove('sidebar-open'); } catch (e) { /* ignore */ }
+                if (toggle) toggle.focus();
+            }
+
+            if (toggle) toggle.addEventListener('click', function (e) { e.preventDefault(); var expanded = toggle.getAttribute('aria-expanded') === 'true'; if (expanded) { closeSidebar(); } else { openSidebar(); } });
+            if (closeBtn) closeBtn.addEventListener('click', function (e) { e.preventDefault(); closeSidebar(); });
+            if (overlay) overlay.addEventListener('click', function (e) { closeSidebar(); });
+
+            // close on Esc
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSidebar(); });
+        })();
+    </script>
 </header>

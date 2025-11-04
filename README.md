@@ -50,6 +50,18 @@ Requisitos mínimos:
 .\mvnw.cmd spring-boot:run
 ```
 
+Executando com Docker Compose (Postgres)
+
+O arquivo de compose para executar o serviço Postgres localmente é `compose-postgres.yaml` na raiz do projeto. Use o comando abaixo para subir os containers (ele irá conectar o Postgres à network externa `blog-net`):
+
+```powershell
+# subir containers usando o arquivo compose-postgres.yaml
+docker compose -f compose-postgres.yaml up -d
+
+# parar e remover containers
+docker compose -f compose-postgres.yaml down
+```
+
 Depois abra http://localhost:8080 no navegador.
 
 > Observação: Ao rodar testes a suite utiliza um banco H2 em memória com as migrações SQL aplicadas automaticamente.

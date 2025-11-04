@@ -61,7 +61,7 @@ public class HomeController {
     @GetMapping("/search")
     public ModelAndView search(@RequestParam(value = "q", required = false) String q,
                                @RequestParam(value = "page", defaultValue = "0") int page) {
-        int size = 1;
+        int size = 10; // show 10 results per page
         Page<Post> results = service.search(q == null ? "" : q, page, size);
         List<PostDTO> posts = results.stream().map(mapper::toDTO).collect(Collectors.toList());
         ModelAndView mv = new ModelAndView("search/results");

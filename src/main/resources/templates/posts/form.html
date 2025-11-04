@@ -61,7 +61,7 @@
             <input id="image" type="hidden" th:field="*{image}" />
         </div>
 
-        <div>
+        <div class="form-group">
             <label for="category">Categoria</label>
             <select id="category" name="categoryId" th:field="*{categoryId}" class="form-control">
                 <option value="" th:if="${categories == null or #lists.isEmpty(categories)}">-- sem categorias --
@@ -76,7 +76,7 @@
 
         <div>
             <button type="submit" th:text="${formMethod == 'put'} ? 'Atualizar' : 'Criar'">Enviar</button>
-            <a th:href="@{/posts}">Cancelar</a>
+            <a class="btn btn-secondary" th:href="@{/posts}">Cancelar</a>
         </div>
     </form>
 

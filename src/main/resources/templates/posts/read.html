@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/base}">
 <head>
     <meta charset="UTF-8"/>
@@ -12,12 +13,16 @@
     <h3 th:text="${post.subtitle}"></h3>
 
     <div th:if="${post.image != null}">
-        <img th:attr="data-base64=${post.image}" alt="Capa" style="max-width: 100%; height: auto;"/>
+        <img th:attr="data-base64=${post.image}" alt="Capa" style="max-width: 100%; height: auto; max-height: 240px; object-fit: fill;"/>
     </div>
 
     <div>
-        <h3>Conteúdo</h3>
         <div th:utext="${post.body} ?: ''">Conteúdo do post</div>
+    </div>
+
+    <!-- Edit button visible only to admins -->
+    <div style="margin-top:1rem;">
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/posts/form/{id}(id=${post.id})}" class="btn btn-edit">Editar</a>
     </div>
 
     <script>

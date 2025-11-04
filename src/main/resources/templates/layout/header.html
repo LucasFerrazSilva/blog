@@ -28,10 +28,10 @@
         </aside>
 
         <!-- search form -->
-        <form th:action="@{/search}" method="get" style="display:inline-block; margin-left:1rem;">
+        <form class="menu-search" th:action="@{/search}" method="get" style="margin-left:1rem;">
             <label for="menuSearch" class="sr-only" style="position:absolute; left:-9999px;">Pesquisar</label>
             <input id="menuSearch" type="text" name="q" placeholder="Pesquisar..." th:value="${q}"/>
-            <button type="submit">Buscar</button>
+            <button type="submit" class="menu-search-btn">Buscar</button>
         </form>
     </nav>
 

@@ -3,6 +3,7 @@ header {
     background-color: #1a73e8;
     color: white;
     position: relative; /* allow absolutely positioned hamburger */
+    margin-bottom: 20px;
 }
 
 header nav a {
@@ -71,6 +72,10 @@ header nav a:hover {
         color:white;
         font-weight:600;
         margin-left: 0.25rem;
+    }
+
+    .menu-search-btn {
+        display: none !important; /* hide menu search button on mobile */
     }
 }
 

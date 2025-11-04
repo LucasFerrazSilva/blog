@@ -23,10 +23,6 @@ h1 {
     background-color: #f7f7f7;
 }
 
-.form-group {
-    margin-bottom: 1rem;
-}
-
 .error {
     color: #c00;
     font-size: 0.9em;
@@ -127,22 +123,43 @@ header form {
     display: inline-flex;
     gap: 0.25rem;
     align-items: center;
-    width: 100%;
+    width: auto; /* changed from 100% so it doesn't push other nav items */
     text-align: right;
 }
 
-header form input[type="text"] {
-    padding: 0.35rem 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* ensure hamburger is hidden while sidebar open (script adds body.sidebar-open) */
+body.sidebar-open .hamburger-btn {
+    display: none !important;
 }
 
+/* ensure search input has clear contrast */
+header form input[type="text"] {
+    padding: 0.35rem 0.5rem;
+    border: 1px solid rgba(26,115,232,0.15);
+    border-radius: 6px;
+    background: var(--bg);
+    color: #111; /* ensure text is visible */
+    min-width: 120px;
+}
+
+/* make the header search button use the app primary blue so it's readable and consistent
+   and remove special casing for mobile so it's the same on desktop and mobile */
+header nav form button,
 header form button {
     padding: 0.35rem 0.6rem;
-    border-radius: 4px;
-    border: 1px solid #bbb;
-    background: #fff;
+    border-radius: 6px;
+    border: 1px solid var(--blue-300);
+    background: var(--blue-500) !important;
+    color: #fff !important;
     cursor: pointer;
+    font-weight: 600;
+    z-index: 2000; /* ensure button sits above background but below overlay/sidebar */
+}
+
+header nav form button:hover,
+header form button:hover {
+    background: var(--blue-600) !important;
+    transform: translateY(-1px);
 }
 
 /* posts list responsive tweaks */
@@ -258,3 +275,169 @@ header form button {
 
 /* ensure mobile search hidden by default on desktop */
 .mobile-search { display: none; }
+
+/* ==========================
+   Component styles (forms, buttons, inputs)
+   Blue palette tuned for a blog
+   ========================== */
+:root{
+    --blue-50: #eaf3ff;
+    --blue-100:#d4e7ff;
+    --blue-300:#7fb9ff;
+    --blue-500:#1a73e8; /* primary */
+    --blue-600:#155ec2;
+    --blue-700:#0f4aa0;
+    --muted:#6c7a89;
+    --bg:#ffffff;
+}
+
+/* Base typography for controls */
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+/* Form controls */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="file"],
+select,
+textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid rgba(26,115,232,0.15);
+    border-radius: 8px;
+    background: var(--bg);
+    color: #111;
+    transition: box-shadow 150ms ease, border-color 150ms ease;
+    outline: none;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #9aa6b2;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 4px 12px rgba(26,115,232,0.08), 0 0 0 4px rgba(26,115,232,0.10);
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+/* Labels and form groups */
+.form-group label, label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+/* Textarea */
+textarea { min-height: 140px; resize: vertical; }
+
+/* File input wrapper (for nicer upload UI) */
+.file-input-wrapper { display:flex; gap:0.5rem; align-items:center; }
+input[type="file"] { padding: 0.35rem; }
+
+/* Buttons */
+button, .btn {
+    display: inline-block;
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: var(--blue-500);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 80ms ease, background 120ms ease, box-shadow 120ms ease;
+    box-shadow: 0 2px 6px rgba(16,66,122,0.06);
+}
+
+button:hover, .btn:hover { background: var(--blue-600); transform: translateY(-1px); }
+button:active, .btn:active { transform: translateY(0); }
+
+.btn-outline {
+    background: transparent;
+    color: var(--blue-700);
+    border-color: rgba(26,115,232,0.12);
+}
+
+.btn-primary { background: var(--blue-500); border-color: var(--blue-500); color: #fff; }
+
+/* specific edit button used in post read */
+.btn-edit {
+    background: var(--blue-600);
+    border-color: var(--blue-600);
+    color: #fff;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+}
+
+/* disabled state */
+button[disabled], .btn[disabled], .disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* small helper text under controls */
+.form-note { font-size: 0.85rem; color: #6c7a89; margin-top: 0.35rem; }
+
+/* compact forms in header */
+header form input[type="text"], header form button { height: 36px; }
+
+/* make sure controls look good on small thumbnails */
+.container ul li img { max-height: 120px; object-fit: cover; }
+
+/* ensure focus outlines are visible for accessibility */
+:focus { outline: 3px solid rgba(26,115,232,0.12); outline-offset: 2px; }
+
+/* small responsive tweak for very small screens */
+@media (max-width: 420px) {
+    input[type="text"], textarea { font-size: 0.95rem; }
+    .btn { padding: 0.4rem 0.6rem; }
+}
+
+/* specific menu search tweaks */
+.menu-search { display:flex; align-items:center; gap:0.4rem; margin-left:1rem; }
+.menu-search input[type="text"] { min-width:140px; max-width:320px; }
+.menu-search-btn { padding:0.35rem 0.6rem; border-radius:6px; border:1px solid var(--blue-300); background:var(--blue-500); color:#fff; z-index:2000; cursor:pointer; }
+.menu-search-btn:hover { background:var(--blue-600); }
+
+/* remove special mobile-only button style to keep consistency */
+.hamburger-btn.mobile-only { display: none; }
+
+/* Footer styles */
+.site-footer {
+    background: linear-gradient(180deg, var(--blue-600), var(--blue-700));
+    color: #fff;
+    padding: 1.15rem 0;
+    margin-top: 2rem;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    font-size: 0.95rem;
+}
+
+.site-footer .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.site-footer p { margin: 0; }
+
+/* small screens: stack and center */
+@media (max-width: 520px) {
+    .site-footer .container { flex-direction: column; text-align: center; }
+}
+
+/* link styles inside footer (if links are added later) */
+.site-footer a { color: rgba(255,255,255,0.95); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; color: #f0f7ff; }

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-app-deployment
+  namespace: blog
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: blog-app
+  template:
+    metadata:
+      labels:
+        app: blog-app
+    spec:
+      containers:
+        - name: blog-app
+          image: lucasferraz95/blog:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              value: "jdbc:postgresql://postgres:5432/blog"
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_PASSWORD

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: blog-app
-          image: lucasferraz95/blog:1.0.0
+          image: lucasferraz95/blog:1.0.1
           ports:
             - containerPort: 8080
           env:
